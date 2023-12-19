@@ -16,42 +16,50 @@
 Servo neckServo;
 Servo armServo;
 
+#define NECK_ANGLE_MIN 0
+#define NECK_ANGLE_MAX 90
+#define NECK_ANGLE_STEP 5
+
+#define ARM_ANGLE_MIN 0
+#define ARM_ANGLE_MAX 25
+#define ARM_ANGLE_STEP 5
+
 void setup() {
 #ifdef DEBUG
     ESP_LOGI(MAIN_TAG, "Setup...");
 #endif
     neckServo.attach(PIN_NECK_SERVO);
-    neckServo.write(0);
+    neckServo.write(NECK_ANGLE_MIN);
 
     armServo.attach(PIN_ARM_SERVO);
-    armServo.write(30);
+    armServo.write(ARM_ANGLE_MAX);
 
     delay(1000 * 5);
 }
 
 void loop() {
-    for(auto i = 30; i > -1; i -= 5) {
+    for(auto i = ARM_ANGLE_MAX; i >= ARM_ANGLE_MIN; i -= ARM_ANGLE_STEP) {
         armServo.write(i);
         delay(100);
     }
 
     delay(1000 * 1);
     
-    for(auto i = 0; i < 90; i += 5) {
+    for(auto i = NECK_ANGLE_MIN; i <= NECK_ANGLE_MAX; i += NECK_ANGLE_STEP) {
         neckServo.write(i);
         delay(50);
     }
 
     delay(1000 * 2);
 
-    for(auto i = 90; i > -1; i -= 5) {
+    for(auto i = NECK_ANGLE_MAX; i >= NECK_ANGLE_MIN; i -= NECK_ANGLE_STEP) {
         neckServo.write(i);
         delay(50);
     }
 
     delay(1000 * 2);
 
-    for(auto i = 0; i < 30; i += 5) {
+    for(auto i = ARM_ANGLE_MIN; i <= ARM_ANGLE_MAX; i += ARM_ANGLE_STEP) {
         armServo.write(i);
         delay(100);
     }
