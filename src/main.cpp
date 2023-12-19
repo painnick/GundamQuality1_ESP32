@@ -16,53 +16,99 @@
 Servo neckServo;
 Servo armServo;
 
-#define NECK_ANGLE_MIN 0
-#define NECK_ANGLE_MAX 90
-#define NECK_ANGLE_STEP 5
+#define NECK_ANGLE_START 90
+#define NECK_ANGLE_1 180
+#define NECK_ANGLE_SHAKE1 30
+#define NECK_ANGLE_SHAKE2 120
+#define NECK_ANGLE_SHAKE3 135
 
-#define ARM_ANGLE_MIN 0
-#define ARM_ANGLE_MAX 25
-#define ARM_ANGLE_STEP 5
+
+#define ARM_ANGLE_START 0
+#define ARM_ANGLE_1 20
+
+void shakingHead();
+void glance();
 
 void setup() {
 #ifdef DEBUG
     ESP_LOGI(MAIN_TAG, "Setup...");
 #endif
     neckServo.attach(PIN_NECK_SERVO);
-    neckServo.write(NECK_ANGLE_MIN);
+    neckServo.write(NECK_ANGLE_START);
 
     armServo.attach(PIN_ARM_SERVO);
-    armServo.write(ARM_ANGLE_MAX);
+    armServo.write(ARM_ANGLE_1);
 
     delay(1000 * 5);
 }
 
 void loop() {
-    for(auto i = ARM_ANGLE_MAX; i >= ARM_ANGLE_MIN; i -= ARM_ANGLE_STEP) {
+    for (auto i = ARM_ANGLE_1; i >= ARM_ANGLE_START; i -= 3) {
         armServo.write(i);
         delay(100);
     }
 
     delay(1000 * 1);
-    
-    for(auto i = NECK_ANGLE_MIN; i <= NECK_ANGLE_MAX; i += NECK_ANGLE_STEP) {
+
+    for (auto i = NECK_ANGLE_START; i <= NECK_ANGLE_1; i += 5) {
         neckServo.write(i);
         delay(50);
     }
 
     delay(1000 * 2);
 
-    for(auto i = NECK_ANGLE_MAX; i >= NECK_ANGLE_MIN; i -= NECK_ANGLE_STEP) {
+    for (auto i = NECK_ANGLE_1; i >= NECK_ANGLE_START; i -= 5) {
         neckServo.write(i);
         delay(50);
     }
 
-    delay(1000 * 2);
+    delay(1000 * 1);
 
-    for(auto i = ARM_ANGLE_MIN; i <= ARM_ANGLE_MAX; i += ARM_ANGLE_STEP) {
+    shakingHead();
+
+    delay(1000 * 1);
+
+    for (auto i = ARM_ANGLE_START; i <= ARM_ANGLE_1; i += 3) {
         armServo.write(i);
         delay(100);
     }
 
-    delay(1000 * 10);
+    delay(1000 * 3);
+
+    glance();
+
+    delay(1000 * 7);
+}
+
+
+void shakingHead() {
+    for (auto i = NECK_ANGLE_START; i >= NECK_ANGLE_SHAKE1; i -= 5) {
+        neckServo.write(i);
+        delay(30);
+    }
+
+    for (auto i = NECK_ANGLE_SHAKE1; i <= NECK_ANGLE_SHAKE2; i += 5) {
+        neckServo.write(i);
+        delay(30);
+    }
+
+    for (auto i = NECK_ANGLE_SHAKE2; i >= NECK_ANGLE_START; i -= 5) {
+        neckServo.write(i);
+        delay(30);
+    }
+}
+
+
+void glance() {
+    for (auto i = NECK_ANGLE_START; i <= NECK_ANGLE_SHAKE3; i += 3) {
+        neckServo.write(i);
+        delay(50);
+    }
+
+    delay(1000);
+
+    for (auto i = NECK_ANGLE_SHAKE3; i >= NECK_ANGLE_START; i -= 3) {
+        neckServo.write(i);
+        delay(20);
+    }
 }
