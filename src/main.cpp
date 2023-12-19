@@ -24,7 +24,8 @@ Servo armServo;
 
 
 #define ARM_ANGLE_START 0
-#define ARM_ANGLE_1 20
+#define ARM_ANGLE_1 16
+#define ARM_ANGLE_2 20
 
 void shakingHead();
 void glance();
@@ -37,7 +38,7 @@ void setup() {
     neckServo.write(NECK_ANGLE_START);
 
     armServo.attach(PIN_ARM_SERVO);
-    armServo.write(ARM_ANGLE_1);
+    armServo.write(ARM_ANGLE_2);
 
     delay(1000 * 5);
 }
@@ -76,6 +77,13 @@ void loop() {
     delay(1000 * 3);
 
     glance();
+
+    delay(1000 * 1);
+
+    for (auto i = ARM_ANGLE_1; i <= ARM_ANGLE_2; i += 3) {
+        armServo.write(i);
+        delay(100);
+    }
 
     delay(1000 * 7);
 }
