@@ -32,10 +32,13 @@ void glance();
 void setup() {
     ESP_LOGI(MAIN_TAG, "Setup...");
 
+    ESP_LOGI(MAIN_TAG, "Setup Neck Servo");
     pinMode(PIN_NECK_SERVO, OUTPUT);
     neckServo.attach(PIN_NECK_SERVO);
     neckServo.write(NECK_ANGLE_START);
 
+    ESP_LOGI(MAIN_TAG, "Setup Arm Servo");
+    pinMode(PIN_ARM_SERVO, OUTPUT);
     armServo.attach(PIN_ARM_SERVO);
     armServo.write(ARM_ANGLE_2);
 
@@ -44,24 +47,31 @@ void setup() {
     delay(1000);
     playBackground();
 
+    // Motor Driver
+    ESP_LOGI(MAIN_TAG, "Setup Zaku Motor Driver");
     ledcSetup(CH_ZAKU_MOTOR, 1000, 8);
     ledcAttachPin(PIN_ZAKU_MOTOR, CH_ZAKU_MOTOR);
     ledcWrite(CH_ZAKU_MOTOR, 255); /* MAX 255 */
 
+    // LEDs
+    ESP_LOGI(MAIN_TAG, "Setup First Gundam Eyes");
     ledcSetup(CH_GUNDAM_EYE, 1000, 8);
     ledcAttachPin(PIN_GUNDAM_EYE, CH_GUNDAM_EYE);
     ledcWrite(CH_GUNDAM_EYE, 127);
 
+    ESP_LOGI(MAIN_TAG, "Setup First Gundam Gatling");
     ledcSetup(CH_GUNDAM_GATLING, 1000, 8);
     ledcAttachPin(PIN_GUNDAM_GATLING, CH_GUNDAM_GATLING);
     ledcWrite(CH_GUNDAM_GATLING, 127);
 
+    ESP_LOGI(MAIN_TAG, "Setup Zaku Eyes");
     ledcSetup(CH_ZAKU_EYE, 1000, 8);
     ledcAttachPin(PIN_ZAKU_EYE, CH_ZAKU_EYE);
     ledcWrite(CH_ZAKU_EYE, 127);
 }
 
 void loop() {
+    ESP_LOGD(MAIN_TAG, "Arm Down #1");
     for (auto i = ARM_ANGLE_1; i >= ARM_ANGLE_START; i -= 3) {
         armServo.write(i);
         delay(100);
@@ -69,6 +79,7 @@ void loop() {
 
     delay(1000 * 1);
 
+    ESP_LOGD(MAIN_TAG, "Face Left");
     for (auto i = NECK_ANGLE_START; i <= NECK_ANGLE_1; i += 5) {
         neckServo.write(i);
         delay(50);
@@ -76,6 +87,7 @@ void loop() {
 
     delay(1000 * 2);
 
+    ESP_LOGD(MAIN_TAG, "Face Front");
     for (auto i = NECK_ANGLE_1; i >= NECK_ANGLE_START; i -= 5) {
         neckServo.write(i);
         delay(50);
@@ -83,10 +95,12 @@ void loop() {
 
     delay(1000 * 1);
 
+    ESP_LOGD(MAIN_TAG, "Shake Head");
     shakingHead();
 
     delay(1000 * 1);
 
+    ESP_LOGD(MAIN_TAG, "Arm Up #1");
     for (auto i = ARM_ANGLE_START; i <= ARM_ANGLE_1; i += 3) {
         armServo.write(i);
         delay(100);
@@ -94,10 +108,12 @@ void loop() {
 
     delay(1000 * 3);
 
+    ESP_LOGD(MAIN_TAG, "Glance");
     glance();
 
     delay(1000 * 1);
 
+    ESP_LOGD(MAIN_TAG, "Arm Up #2");
     for (auto i = ARM_ANGLE_1; i <= ARM_ANGLE_2; i += 3) {
         armServo.write(i);
         delay(100);
