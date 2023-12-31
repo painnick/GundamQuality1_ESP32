@@ -11,13 +11,13 @@
 #define PIN_ARM_SERVO 26
 
 #define PIN_ZAKU_MOTOR 25
-#define CH_ZAKU_MOTOR 1
+#define CH_ZAKU_MOTOR 6
 
 #define PIN_GUNDAM_EYE 15
-#define CH_GUNDAM_EYE 2
+#define CH_GUNDAM_EYE 7
 
 #define PIN_GUNDAM_GATLING 4
-#define CH_GUNDAM_GATLING 3
+#define CH_GUNDAM_GATLING 14
 
 #define PIN_ZAKU_EYE 18
-#define CH_ZAKU_EYE 4
+#define CH_ZAKU_EYE 15
