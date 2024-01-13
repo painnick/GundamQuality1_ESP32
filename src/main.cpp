@@ -25,6 +25,7 @@ Servo armServo;
 #define ARM_ANGLE_START 0
 #define ARM_ANGLE_1 16
 #define ARM_ANGLE_2 20
+#define ARM_ANGLE_3 12
 
 #define ZAKU_MOTOR_RUN() (ledcWrite(CH_ZAKU_MOTOR, 255))
 #define ZAKU_MOTOR_STOP() (ledcWrite(CH_ZAKU_MOTOR, 0))
@@ -236,7 +237,21 @@ void scene2()
     delay(2000);
 
     ESP_LOGD(MAIN_TAG, "Arm Down #1");
-    for (auto i = ARM_ANGLE_2; i >= ARM_ANGLE_START; i -= 1)
+    for (auto i = ARM_ANGLE_2; i >= ARM_ANGLE_3; i -= 1)
+    {
+        armServo.write(i);
+        delay(300);
+    }
+    armServo.write(ARM_ANGLE_3);
+    delay(500);
+    ZAKU_MOTOR_STOP();
+
+    delay(1500);
+    ZAKU_MOTOR_RUN();
+    delay(500);
+
+    ESP_LOGD(MAIN_TAG, "Arm Down #2");
+    for (auto i = ARM_ANGLE_3; i >= ARM_ANGLE_START; i -= 1)
     {
         armServo.write(i);
         delay(200);
@@ -248,9 +263,10 @@ void scene2()
     shakingHead(NECK_ANGLE_LEFT, NECK_ANGLE_LEFT - 15, NECK_ANGLE_LEFT + 15, 2, 30);
     delay(1000);
 
+    ESP_LOGD(MAIN_TAG, "Blink Gundam Eyes");
     for (auto i = 0; i < 2; i++)
     {
-        blinkGundamEyes(8);
+        blinkGundamEyes(10);
     }
     delay(1000);
 
@@ -281,6 +297,9 @@ void scene2()
     delay(1000);
 
     ZAKU_MOTOR_STOP();
+    delay(1000);
+    GUNDAM_EYE_TURN_OFF();
+
     delay(1000 * 10);
 }
 
