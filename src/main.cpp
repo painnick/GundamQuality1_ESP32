@@ -41,10 +41,9 @@ Servo armServo;
 #define ZAKU_EYE_TURN_OFF() (ledcWrite(PIN_ZAKU_EYE, 0))
 
 void shakingHead();
-
 void glance();
-
 void runZakuMotor(int ms);
+void blinkGundamEyes();
 
 void setup()
 {
@@ -90,10 +89,14 @@ void setup()
 
 void loop()
 {
+    ZAKU_MOTOR_RUN();
+    delay(1000);
     playGo();
-    runZakuMotor(6000);
+    delay(5000);
+    ZAKU_MOTOR_STOP();
 
     GUNDAM_EYE_TURN_ON();
+    runZakuMotor(2000);
     delay(1000);
 
     ESP_LOGD(MAIN_TAG, "Arm Down #1");
@@ -102,6 +105,7 @@ void loop()
         armServo.write(i);
         delay(100);
     }
+    armServo.write(ARM_ANGLE_START);
     delay(1000);
 
     ESP_LOGD(MAIN_TAG, "Face Left");
@@ -110,6 +114,7 @@ void loop()
         neckServo.write(i);
         delay(50);
     }
+    neckServo.write(NECK_ANGLE_LEFT);
     delay(2000);
 
     GUNDAM_EYE_EMPHASIZE();
@@ -122,6 +127,7 @@ void loop()
         GUNDAM_GATLING_TURN_OFF();
         delay(100);
     }
+    delay(300);
     stopGatling();
 
     GUNDAM_EYE_TURN_ON();
@@ -133,29 +139,45 @@ void loop()
         neckServo.write(i);
         delay(50);
     }
+    neckServo.write(NECK_ANGLE_START);
     delay(3000);
 
     ESP_LOGD(MAIN_TAG, "Face Left");
-    for (auto i = NECK_ANGLE_START; i <= NECK_ANGLE_LEFT; i += 5)
+    for (auto i = NECK_ANGLE_START; i <= NECK_ANGLE_LEFT; i += 4)
     {
         neckServo.write(i);
         delay(50);
     }
-    delay(1000);
+    neckServo.write(NECK_ANGLE_LEFT);
+    delay(2000);
 
     ESP_LOGD(MAIN_TAG, "Face Front");
-    for (auto i = NECK_ANGLE_LEFT; i >= NECK_ANGLE_START; i -= 5)
+    for (auto i = NECK_ANGLE_LEFT; i >= NECK_ANGLE_START; i -= 8)
     {
         neckServo.write(i);
         delay(50);
     }
-    delay(1000);
+    neckServo.write(NECK_ANGLE_START);
+    delay(1500);
+
+    for (auto i = 0; i < 3; i++)
+    {
+        blinkGundamEyes();
+    }
+    delay(2000);
 
     ESP_LOGD(MAIN_TAG, "Shake Head");
     shakingHead();
     delay(1000);
 
-    runZakuMotor(3000);
+    GUNDAM_EYE_TURN_OFF();
+    delay(5000);
+
+    ZAKU_MOTOR_RUN();
+    delay(1000);
+    GUNDAM_EYE_TURN_ON();
+    delay(2000);
+    ZAKU_MOTOR_STOP();
 
     ESP_LOGD(MAIN_TAG, "Arm Up #1");
     for (auto i = ARM_ANGLE_START; i <= ARM_ANGLE_1; i += 3)
@@ -163,7 +185,8 @@ void loop()
         armServo.write(i);
         delay(100);
     }
-    delay(3000);
+    armServo.write(ARM_ANGLE_1);
+    delay(2000);
 
     ESP_LOGD(MAIN_TAG, "Glance");
     glance();
@@ -177,6 +200,7 @@ void loop()
         armServo.write(i);
         delay(100);
     }
+    armServo.write(ARM_ANGLE_2);
     delay(1000);
 
     GUNDAM_EYE_TURN_OFF();
@@ -227,4 +251,18 @@ void runZakuMotor(const int ms)
     ZAKU_MOTOR_RUN();
     delay(ms);
     ZAKU_MOTOR_STOP();
+}
+
+void blinkGundamEyes()
+{
+    for (auto i = 95; i > 0; i -= 5)
+    {
+        ledcWrite(CH_GUNDAM_EYE, i);
+        delay(50);
+    }
+    for (auto i = 0; i <= 95; i += 5)
+    {
+        ledcWrite(CH_GUNDAM_EYE, i);
+        delay(50);
+    }
 }
