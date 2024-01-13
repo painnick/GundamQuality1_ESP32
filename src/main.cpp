@@ -91,9 +91,16 @@ void setup()
     ZAKU_EYE_TURN_OFF();
 }
 
+int sceneIndex = 1;
+
 void loop()
 {
-    scene2();
+    if (sceneIndex == 0)
+        scene2();
+    else
+        scene1();
+
+    sceneIndex = (++sceneIndex) % 3;
 }
 
 void scene1()
