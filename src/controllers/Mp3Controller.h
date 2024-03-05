@@ -11,7 +11,7 @@
 #ifdef DEBUG
 #define DEFAULT_VOLUME 10
 #else
-#define DEFAULT_VOLUME 20
+#define DEFAULT_VOLUME 15
 #endif
 
 int BACKGROUND_TRACK = -1;
@@ -161,6 +161,13 @@ inline void playGo()
 
     BACKGROUND_TRACK = dfmp3.getCurrentTrack();
 }
+
+inline void playYareYare()
+{
+    dfmp3.playMp3FolderTrack(3);
+    dfmp3.loop();
+}
+
 
 inline void playGatling()
 {

@@ -101,6 +101,8 @@ void loop()
         scene1();
 
     sceneIndex = (++sceneIndex) % 3;
+
+    delay(1000 * 30);
 }
 
 void scene1()
@@ -111,6 +113,8 @@ void scene1()
     delay(5000);
     ZAKU_MOTOR_STOP();
 
+    GUNDAM_EYE_EMPHASIZE();
+    delay(2000);
     GUNDAM_EYE_TURN_ON();
     runZakuMotor(2000);
     delay(1000);
@@ -176,21 +180,22 @@ void scene1()
     neckServo.write(NECK_ANGLE_START);
     delay(1500);
 
-    for (auto i = 0; i < 3; i++)
+    for (auto i = 0; i < 2; i++)
     {
         blinkGundamEyes();
     }
-    delay(2000);
+    delay(1000);
 
     ESP_LOGD(MAIN_TAG, "Shake Head");
     shakingHead();
-    delay(1000);
+    playYareYare();
+    delay(2000);
 
     GUNDAM_EYE_TURN_OFF();
     delay(5000);
 
     ZAKU_MOTOR_RUN();
-    delay(1000);
+    delay(2000);
     GUNDAM_EYE_TURN_ON();
     delay(2000);
     ZAKU_MOTOR_STOP();
@@ -361,14 +366,14 @@ void blinkGundamEyes(const int step)
     for (auto i = 95; i > 0; i -= step)
     {
         ledcWrite(CH_GUNDAM_EYE, i);
-        delay(50);
+        delay(40);
     }
     ledcWrite(CH_GUNDAM_EYE, 0);
 
     for (auto i = 0; i <= 95; i += step)
     {
         ledcWrite(CH_GUNDAM_EYE, i);
-        delay(50);
+        delay(30);
     }
     ledcWrite(CH_GUNDAM_EYE, 95);
 }
